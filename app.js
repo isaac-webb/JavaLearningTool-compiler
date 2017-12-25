@@ -1,4 +1,7 @@
+'use strict';
+
 // Import package dependencies
+const debug = require('debug')('javalearningtool-compiler:app');
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -11,11 +14,14 @@ const users = require('./routers/users.router');
 // Create a new express application
 const app = express();
 
-// Configure application middleware
-if (process.env.NODE_ENV === 'development') {
-  // Include logger if in development mode
-  app.use(morgan('dev'));
+// Configure logger to write to debug, format depending on environment
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev', { stream: { write: (msg) => debug(msg) } }));
+} else {
+  app.use(morgan('tiny', { stream: { write: (msg) => debug(msg) } }));
 }
+
+// Configure other application middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());

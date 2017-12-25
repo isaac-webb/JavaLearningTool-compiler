@@ -1,13 +1,14 @@
 'use strict';
 
 // Import dependencies
+const debug = require('debug')('java:controller');
 const { exec, execFile } = require('child_process');
 const { promisify } = require('util');
 const fs = require("fs");
 
 module.exports = {
   runTest: function (req, res, next) {
-    // TODO: Rewrite this to deal with possible more than one test executing
+    // TODO: Rewrite this to deal with possiblity more than one test executing
     // Write the given code to the directory
     const writeFile = promisify(fs.writeFile);
     const copyFile = promisify(fs.copyFile);
@@ -43,6 +44,7 @@ module.exports = {
       });
     })
     .catch((err) => {
+      debug(err.message);
       err.message = 'Error while copying testing files';
       next(err);
     });

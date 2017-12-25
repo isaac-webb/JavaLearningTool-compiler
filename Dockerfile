@@ -1,27 +1,32 @@
 # Start with the lightweight alpine version of node
 FROM node:alpine
 
-# Create directory for sandbox writing
-RUN mkdir /sandbox && chown node:node /sandbox
-
 # Install Java
 RUN apk --update add openjdk8
 RUN ln -s /usr/lib/jvm/default-jvm/bin/javac /usr/bin/javac
 
-# Set the working directory
-WORKDIR /home/node/app
+# Create directory for sandbox writing
+RUN mkdir /sandbox && chown node:node /sandbox
 
 # Expose the application port
 EXPOSE 3000
+
+# Set the working directory
+WORKDIR /home/node/app
+
+# Copy the package.json file and install dependencies
+COPY package*.json ./
+RUN npm install
 
 # Run as the unprivileged node user
 USER node
 
 # Run the application on startup
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
 
 # Configure development mode
 ENV NODE_ENV development
+ENV DEBUG javalearningtool-compiler:*
 
 # Add all of the application files
-COPY ./ /home/node/app/
+COPY . .

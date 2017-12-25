@@ -1,22 +1,27 @@
 {
   "name": "javalearningtool-compiler",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The backend and compiler for an online Java learning web app",
   "license": "MIT",
   "private": true,
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "startDev": "nodemon server.js"
+    "startDev": "nodemon server",
+    "test": "mocha",
+    "coverage": "nyc mocha"
   },
   "dependencies": {
-    "body-parser": "^1.17.1",
-    "cookie-parser": "^1.4.3",
-    "debug": "~2.6.3",
-    "express": "^4.15.2",
-    "morgan": "^1.8.1"
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "debug": "*",
+    "express": "*",
+    "morgan": "*"
   },
   "devDependencies": {
-    "nodemon": "^1.12.0"
+    "chai": "*",
+    "istanbul": "*",
+    "mocha": "*",
+    "nodemon": "*"
   }
 }
