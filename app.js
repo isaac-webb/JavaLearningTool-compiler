@@ -1,39 +1,41 @@
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+// Import package dependencies
+const express = require('express');
+const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+// Import express routers
+const java = require('./routers/java.router');
+const users = require('./routers/users.router');
 
-var app = express();
+// Create a new express application
+const app = express();
 
-app.use(logger('dev'));
+// Configure application middleware
+if (process.env.NODE_ENV === 'development') {
+  // Include logger if in development mode
+  app.use(morgan('dev'));
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
+// Configure the express app to use the routers
+app.use('/java', java);
 app.use('/users', users);
 
-// catch 404 and forward to error handler
+// Catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-// error handler
+// Global error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
+  // Render the error page
   res.status(err.status || 500);
-  res.send('error');
+  process.env.NODE_ENV !== 'production' ? res.send(err.message) : res.send();
 });
 
 module.exports = app;
