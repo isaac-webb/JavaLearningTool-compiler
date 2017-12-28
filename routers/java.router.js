@@ -7,6 +7,7 @@ const java = require('../controllers/java.controller');
 // Create the router
 const router = Router();
 
+// POST Java compiler route
 router.post('/:testName', java.runTest);
 
 module.exports = router;

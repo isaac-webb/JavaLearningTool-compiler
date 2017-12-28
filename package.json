@@ -1,7 +1,7 @@
 {
   "name": "javalearningtool-compiler",
-  "version": "0.1.1",
-  "description": "The backend and compiler for an online Java learning web app",
+  "version": "0.1.0",
+  "description": "The back end and compiler for an online Java learning web app",
   "license": "MIT",
   "private": true,
   "main": "server.js",
@@ -9,7 +9,7 @@
     "start": "node server",
     "startDev": "nodemon server",
     "test": "mocha",
-    "coverage": "nyc mocha"
+    "coverage": "nyc --reporter=html mocha"
   },
   "dependencies": {
     "body-parser": "*",
@@ -20,8 +20,9 @@
   },
   "devDependencies": {
     "chai": "*",
-    "istanbul": "*",
+    "nyc": "*",
     "mocha": "*",
-    "nodemon": "*"
+    "nodemon": "*",
+    "supertest": "*"
   }
 }

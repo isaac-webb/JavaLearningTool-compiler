@@ -8,14 +8,34 @@ const fs = require("fs");
 
 module.exports = {
   runTest: function (req, res, next) {
-    // TODO: Rewrite this to deal with possiblity more than one test executing
-    // Write the given code to the directory
+    // Ensure the desired test exists
+    let alphas = /^[a-zA-Z]+$/;
+    if (!(req.params.testName.match(alphas)
+      && fs.existsSync(`./challenges/${req.params.testName}/${req.params.testName}Test.java`))) {
+      let err = new Error(`Test ${req.params.testName} not found`);
+      err.status = 404;
+      next(err);
+      return;
+    }
+
+    // Make sure there is code to run
+    if (!(req.body.src && req.body.src.length > 0)) {
+      let err = new Error(`No code to execute`);
+      err.status = 400;
+      next(err);
+      return;
+    }
+
+    // Promisify the file system callback methods
     const writeFile = promisify(fs.writeFile);
     const copyFile = promisify(fs.copyFile);
+
+    // Write the test file to the sandbox and copy the test file
     Promise.all([writeFile(`/sandbox/${req.params.testName}.java`, req.body.src),
-      copyFile(`/challenges/${req.params.testName}/${req.params.testName}Test.java`,
+      copyFile(`./challenges/${req.params.testName}/${req.params.testName}Test.java`,
         `/sandbox/${req.params.testName}Test.java`)]).then(() => {
       exec(`cd /sandbox && javac ${req.params.testName}Test.java`, (err, stdout, stderr) => {
+        // Output any compilation errors or attempt to execute the code
         if (err) {
           res.status(200).send({
             passed: false,

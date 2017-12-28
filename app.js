@@ -40,6 +40,7 @@ app.use(function(req, res, next) {
 // Global error handler
 app.use(function(err, req, res, next) {
   // Render the error page
+  debug(err.message);
   res.status(err.status || 500);
   process.env.NODE_ENV !== 'production' ? res.send(err.message) : res.send();
 });

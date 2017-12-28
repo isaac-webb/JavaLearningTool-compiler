@@ -18,9 +18,6 @@ WORKDIR /home/node/app
 COPY package*.json ./
 RUN npm install
 
-# Run as the unprivileged node user
-USER node
-
 # Run the application on startup
 CMD ["node", "server.js"]
 
@@ -30,3 +27,9 @@ ENV DEBUG javalearningtool-compiler:*
 
 # Add all of the application files
 COPY . .
+
+# Set permissions on the home directory
+RUN chown -R node:node /home/node
+
+# Run as the unprivileged node user
+USER node

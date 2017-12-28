@@ -1,2 +1,15 @@
+# Node files
 node_modules
-npm-debug.log
+
+# Miscellaneous utility files
+.DS_Store
+Makefile
+LICENSE
+
+# Git files
+.git
+.gitignore
+README.md
+
+# Dynamic challenges directory
+challenges
